@@ -1,0 +1,43 @@
+
+<!--<% layout('layout/auth') -%>-->
+
+
+<% layout('layout/auth') -%>
+<div class="container-fluid mt-5 h-80">
+    <div class="row justify-content-center h-80">
+        <div class="offset-md-6 col-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <form action="/admin/signup" method="post">
+                        <h3 class="text-center mb-4 fw-bold">Welcome SignUp Page</h3>
+                        <div class="mb-3">
+                            <input type="text" name="name" id="name" class="form-control" placeholder="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="number" name="mobileNo" id="mobileNo" class="form-control" placeholder="mobileNo" required>
+                        </div>
+                        <div class="mb-3">
+                            <input type="email" name="email" id="email" class="form-control" placeholder="Email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
+                        </div>
+
+                        <div class="d-grid">
+                            <input type="submit" value="signup" class="btn btn-primary w-100">
+                        </div>
+
+                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                            <div>
+                                <label for="">Do you Have Alredy Account?</label>
+                            </div>
+                            <a href="/admin/login">Login</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

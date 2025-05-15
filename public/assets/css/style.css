@@ -1,0 +1,8 @@
+body, html {
+    height: 100%;
+}
+.bg-side {
+    background-image: url('/assets/images/background.jpg'); /* 🖼️ your image path */
+    background-size: cover;
+    background-position: center;
+}
