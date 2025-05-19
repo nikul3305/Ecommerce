@@ -2,17 +2,20 @@ const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController');
 
+// GET dashBord page
+router.get('/', adminController.getDashBord);
+// GET login page
+router.get('/admin/login', adminController.getLogin);
+// GET signup page
+router.get('/admin/signup', adminController.getSignUp);
+router.get('/logout', adminController.getlogout);
 
-router.get('/',(req,res) => req.session.admin ? res.redirect('/admin/dashBord') : res.render('login'));
-router.get('/admin/dashBord',(req,res) => req.session.admin ? res.render('dashBord',{ admin: req.session.admin }) : res.render('login'));
-router.get('/admin/login', (req, res) =>  req.session.admin ?  res.redirect('/admin/dashBord') : res.render('login'));
-router.get('/admin/signup', (req, res) => req.session.admin ? res.redirect('/admin/dashBord') : res.render('signup'));
+// GET admin dashboard - only accessible if authenticated
+const isAuthenticated =  adminController.isAuthenticated;
+router.get('/admin/dashBord', isAuthenticated, adminController.getAuthenticated);
 
-const isAuthenticated = (req, res, next) => req.session.admin ? next() : res.redirect('/admin/login');
-router.get('/admin/dashBord', isAuthenticated, (req, res) => res.render('dashBord', { admin: req.session.admin }));
-
-
-router.post('/admin/login',adminController.Login);
-router.post('/admin/signup',adminController.SignUp);
+// post login or signup page
+router.post('/admin/login',adminController.postLogin);
+router.post('/admin/signup',adminController.postSignUp);
 
 module.exports = router;
