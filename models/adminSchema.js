@@ -9,7 +9,9 @@ const adminSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        minlength: [8, 'Password must be at least 8 characters long'],
+        // maxlength: [20, 'Password must be at most 20 characters long']
     },
     name: {
         type: String,
@@ -19,7 +21,14 @@ const adminSchema = new mongoose.Schema({
     },
     mobileNo: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        validate: {
+            validator: function(v) {
+                return /^[0-9]{10}$/.test(v); // Exactly 10 digits
+            },
+            message: props => `${props.value} is not a valid 10-digit mobile number!`
+        }
     }
 
 },{

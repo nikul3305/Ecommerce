@@ -1,68 +1,17 @@
 <% layout('layout/auth') -%>
 
-<div class="container ">
-    <div class="row d-flex justify-content-center  ">
-        <div class="col-4 m-1">
-            <% if (typeof message !== 'undefined' && message) { %>
-                <div class="toast show position-fixed top-0   m-3 bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="me-auto">Success</strong>
-                        <small>Just now</small>
-                        <button type="button" class="btn-close btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        <%= message %>
-                    </div>
-                </div>
-            <% } %>
-        </div>
-    </div>
-</div>
+<!--user account logout message-->
+<% include layout/toast_message/logout_message %>
 
-
-<!-- if login messege  -->
-<div class="container ">
-    <div class="row d-flex justify-content-center  ">
-        <div class="col-4 m-1">
-            <% if (typeof error !== 'undefined') { %>
-                <div class="toast show position-fixed top-0 bg-danger text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="me-auto">Login</strong>
-                        <small>Just now</small>
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body ">
-                        <%= error %>
-                    </div>
-                </div>
-            <% } %>
-        </div>
-    </div>
-</div>
+<!--  Login  failed messege-->
+<% include layout/toast_message/login_failed_message %>
 
 <!-- signup succesful messege -->
-<div class="container ">
-    <div class="row d-flex justify-content-center  ">
-        <div class="col-4 m-1">
-                    <% if (typeof success !== 'undefined') { %>
-                        <div class="toast show position-fixed top-0  m-3 bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
-                            <div class="toast-header ">
-                                <strong class="me-auto">Success</strong>
-                                <small>Just now</small>
-                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>
-                            </div>
-                            <div class="toast-body ">
-                                <%= success %>
-                            </div>
-                        </div>
-                    <% } %>
-        </div>
-    </div>
-</div>
+<% include layout/toast_message/signup_succesful_message %>
 
 <!-- login form  -->
-<div class="container-md-fluid  h-100  ">
-    <div class="row  h-100 d-flex justify-content-around align-items-center">
+<div class="container-md-fluid  h-100  mt-5">
+    <div class="row   d-flex justify-content-around align-items-center " style="height: 800px;margin-top: 100px">
         <div class=" col-md-3  offset-7 ">
             <div class="card">
                 <div class="card-body">
@@ -82,7 +31,7 @@
                                 <input type="checkbox" id="remember">
                                 <label for="remember">Remember me</label>
                             </div>
-                            <a href="/admin/signup">Forgot Password?</a>
+                            <a href="/admin/signup">signup</a>
                         </div>
 
                         <div class="d-grid">

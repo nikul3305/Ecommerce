@@ -1,0 +1,30 @@
+<% layout('layout/auth') -%>
+
+
+
+
+<div class="container-fluid  h-100  ">
+    <div class="row  h-100 d-flex justify-content-around align-items-center">
+        <div class=" col-md-3  offset-7 ">
+            <div class="card">
+                <div class="card-body">
+                    <form action="" >
+
+                        <h3 class="text-center mb-4 fw-bold">show user profile</h3>
+                        <div class="mb-3">
+                            Name: <%= userdata.name %>
+                        </div>
+                        <div class="mb-3">
+                            mobileNO:<%= userdata.mobileNo %>
+                        </div>
+                        <div class="mb-3">
+                            Email: <%= userdata.email %>
+                        </div>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

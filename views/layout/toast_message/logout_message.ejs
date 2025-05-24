@@ -1,0 +1,20 @@
+
+<!--Account logout messsage-->
+<div class="container ">
+    <div class="row d-flex justify-content-center  ">
+        <div class="col-4 m-1">
+            <% if (typeof logout_success !== 'undefined' && logout_success) { %>
+                <div class="toast show position-fixed top-0 m-0 z-3    m-3 bg-success text-white" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="toast-header">
+                        <strong class="me-auto">Success</strong>
+                        <small>Just now</small>
+                        <button type="button" class="btn-close btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        <%= logout_success %>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</div>
