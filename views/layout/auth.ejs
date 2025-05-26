@@ -26,5 +26,28 @@
 
 
 </body>
+<script>
+    // Bootstrap validation logic
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom validation to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over forms and prevent submission if invalid
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js" integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO" crossorigin="anonymous"></script>
 </html>

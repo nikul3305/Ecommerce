@@ -25,12 +25,7 @@ router.post('/admin/login',adminController.postLogin);
 router.get('/logout', adminController.getLogout);
 
 
-// User Data  edit in dashBord page
-router.get('/edit/:id', isAuthenticated, adminController.getEdit);
-router.post('/edit/:id', isAuthenticated, adminController.postEdit);
 
-// User Data View  - view_page
-router.get('/view/:id', isAuthenticated, adminController.getView);
 
 
 module.exports = router;

@@ -25,12 +25,9 @@ exports.getAuthenticated =  async (req, res) => {
     delete req.session.login_success;
 
 
-    const updatemessage = req.session.edit;
-    delete req.session.edit;
-
     if(req.session.admin) {
-        const data =await admin.find({});
-        res.render('dashBord', {admin: req.session.admin, login_success: successMessage, data , edit : updatemessage});
+        const Totaluser = await admin.countDocuments();
+        res.render('dashBord', {admin: req.session.admin, login_success: successMessage, Totaluser });
     }else {
         res.render('login');
     }
@@ -55,6 +52,7 @@ exports.postSignUp = async (req, res) => {
             name,
             mobileNo
         });
+
         await Create.save();
          const adminsave  = await Create.save();
 
@@ -131,50 +129,9 @@ exports.getLogout = (req, res) => {
         res.redirect('/admin/login?logout=success');
     });
 
-}
-
-// GET edit_page
-exports.getEdit = async (req,res) => {
-    const userData = await admin.findById({'_id': req.params.id});
-    if(userData){
-        res.render('edit',{userdata:userData});
-    }else{
-        res.redirect('/admin/dashBord');
-    }
-};
-// POST edit_page  - user data update
-exports.postEdit = async (req, res) => {
-    const { name, mobileNo, email } = req.body;
-    try {
-        const userdata = await admin.findByIdAndUpdate(
-            req.params.id,
-            {
-                name,
-                mobileNo,
-                email
-            },
-            { new: true }
-        );
-
-        req.session.edit = "update successfully";
-
-        if (userdata) {
-            res.redirect('/admin/dashBord');
-        } else {
-            res.redirect('/admin/dashBord');
-        }
-    } catch (err) {
-        console.error("Edit error:", err);
-        res.status(500).send("Internal Server Error");
-    }
 };
 
 
-exports.getView = async (req,res) => {
-    const userDataview = await admin.findById({'_id': req.params.id});
-    if(userDataview){
-        res.render('view',{userdata:userDataview});
-    }else{
-        res.redirect('/admin/dashBord');
-    }
-};
+
+
+
