@@ -1,45 +1,72 @@
 <% layout('layout/auth') -%>
 
+<!-- product add message-->
+<% include layout/toast_message/product_add_message.ejs %>
+
+<!-- product update message -->
+<% include layout/toast_message/product_update_message %>
+
+<!-- product delete message-->
+<% include layout/toast_message/product_delete_message %>
 
 <div class="container-fluid">
     <div class="row">
         <% include layout/sidebar %>
-        <div class="  col-lg-10 col-12 offset-lg-2  " style="margin-top: 80px;">
-            <div class="row mt-4 ">
-                <form action="/edit/<%= edit.id %>" method="post" class="needs-validation" novalidate>
-                    <!-- Product Name -->
-                    <div class="form-floating mb-3">
-                        <div class="col-md-4">
-                            <label for="validationDefault01" class="form-label">product name</label>
-                            <input type="text"  class="form-control" name="name" id="validationDefault01" value="<%= edit.name%>" required>
+        <div class="  col-lg-10 col-12 offset-lg-2  " style="margin-top: 70px;">
+            <div class="row mt-4 d-flex justify-content-center">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Edit product</h2>
+                        </div>
+                        <div class="card-body">
+                            <form action="/edit/<%= edit.id %>" method="post" class="needs-validation" novalidate>
+                                <!-- Product Name -->
+                                <div class="form-floating mb-3 w-100 ">
+                                    <div class="col-md-4 w-100">
+                                        <label for="validationDefault01" class="form-label">product name</label>
+                                        <input type="text"  class="form-control w-50" name="name" id="validationDefault01" value="<%= edit.name%>" required>
+                                    </div>
+                                </div>
+                                <!-- Product Description -->
+                                <div class="mb-3 w-50">
+                                    <label for="validationTextarea" class="form-label">description</label>
+                                    <textarea class="form-control"  id="validationTextarea" name="description" placeholder="Required description" required><%= edit.description%></textarea>
+                                    <div class="invalid-feedback">
+                                        Please enter a message in the description.
+                                    </div>
+                                </div>
+                                <!-- Product Status -->
+                                <div class="mb-3">
+                                    <label class="form-label d-block">Status:</label>
+
+                                    <div id="statusGroup" class="border-0 p-0">
+                                        <!-- Radio buttons container -->
+                                        <div class="form-check d-flex">
+                                            <div class="me-5">
+                                                <input class="form-check-input" type="radio" name="status" id="active" value="active" <%= edit.status == 'active' ? 'checked' : ' ' %> required>
+                                                <label class="form-check-label" for="active">Active</label>
+                                                <div class="invalid-feedback">
+                                                    Please select a status.
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <input class="form-check-input" type="radio" name="status" id="inactive" value="inactive" <%= edit.status == 'inactive' ? 'checked' : ' ' %> required>
+                                                <label class="form-check-label" for="inactive">Inactive</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Submit Button -->
+                                <div>
+                                    <a href="/admin/product" class="text-decoration-none me-3"> <button class="btn btn-warning" type="button"> Back </button></a>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
-                    <!-- Product Description -->
-                    <div class="mb-3">
-                        <label for="validationTextarea" class="form-label">description</label>
-                        <textarea class="form-control" id="validationTextarea" name="description" placeholder="Required description" required><%= edit.description%></textarea>
-                        <div class="invalid-feedback">
-                            Please enter a message in the description.
-                        </div>
-                    </div>
-                    <!-- Product Status -->
-                    <div class="mb-3">
-                        <label class="form-label d-block">Status</label>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="statusActive" value="active" "   <%= edit.status === 'active' ? 'checked' : '' %>   required>
-                            <label class="form-check-label" for="statusActive">Active</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="status" id="statusInactive" value="inactive" <%= edit.status === 'inactive' ? 'checked' : '' %> required>
-                            <label class="form-check-label" for="statusInactive">Inactive</label>
-                        </div>
-                        <div class="invalid-feedback d-block">
-                            Please select a status.
-                        </div>
-                    </div>
-                    <!-- Submit Button -->
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </form>
+                </div>
+
             </div>
         </div>
 

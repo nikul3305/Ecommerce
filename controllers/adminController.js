@@ -1,6 +1,7 @@
 const admin = require('../models/adminSchema');
 const bcrypt = require('bcryptjs');
 const session = require("express-session");
+const products = require('../models/productSchema');
 
 
 // GET Admin
@@ -23,11 +24,10 @@ exports.getDashBord = (req,res) => {
 exports.getAuthenticated =  async (req, res) => {
     const successMessage = req.session.login_success;
     delete req.session.login_success;
-
-
     if(req.session.admin) {
         const Totaluser = await admin.countDocuments();
-        res.render('dashBord', {admin: req.session.admin, login_success: successMessage, Totaluser });
+        const Totalproduct = await products.countDocuments();
+        res.render('dashBord', {admin: req.session.admin, login_success: successMessage, Totaluser , Totalproduct  });
     }else {
         res.render('login');
     }
@@ -55,21 +55,16 @@ exports.postSignUp = async (req, res) => {
 
         await Create.save();
          const adminsave  = await Create.save();
-
-
         if(adminsave){
             const successMessage = "Signup successful! Please login.";
             req.session.signUp_success = successMessage;
         }
-
         res.redirect('/admin/login');
     } catch (error) {
         console.log(error);
         res.render('signup',{signup_err : "Your account already exists.pls login" });
-        // res.status(500).send("Signup Failed");
     }
 };
-
 
 
 // GET Login
@@ -124,12 +119,18 @@ exports.getLogout = (req, res) => {
             console.log('Error destroying session:', err);
             return res.redirect('/admin/dashBord');
         }
-
         // Redirect with query parameter
         res.redirect('/admin/login?logout=success');
     });
-
 };
+exports.getProfile = async (req, res ) => {
+    const admin = req.session.admin;
+    if(admin) {
+        res.render('profile', {admin: admin  });
+    }else {
+        res.render('login');
+    }
+}
 
 
 

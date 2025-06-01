@@ -14,7 +14,6 @@ router.get('/admin/signup', adminController.getSignUp);
 // POST signup_page
 router.post('/admin/signup',adminController.postSignUp);
 
-
 // GET login_page
 router.get('/admin/login', adminController.getLogin);
 // post login_page
@@ -23,6 +22,9 @@ router.post('/admin/login',adminController.postLogin);
 
 // GET logout
 router.get('/logout', adminController.getLogout);
+
+// GET profile
+router.get('/admin/profile', adminController.getProfile);
 
 
 
