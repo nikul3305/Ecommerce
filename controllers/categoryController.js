@@ -1,7 +1,6 @@
-const products = require('../models/productSchema');
 const category = require('../models/categorySchema');
-const path = require("path");
-const multer = require("multer");
+const path = require('path');
+const multer = require('multer');
 
 
 exports.isAuthenticated = (req, res, next) => {
@@ -13,36 +12,22 @@ exports.isAuthenticated = (req, res, next) => {
 }
 
 exports.create = async (req, res) => {
-    const { name, description, status, categoryid } = req.body;
-    const images = req.files ? req.files.map(file => file.filename) : [];
+    const { name, description, status } = req.body;
+    const image = req.file ? req.file.filename : null;
     try {
-        const categoryData = await category.findById(categoryid);
-        if (!categoryData) {
-            req.session.create_failed = "Invalid category selected";
-            return res.redirect('/admin/product');
-        }
-        const add = new products(
-            { name,
-                description,
-                status,
-                image : images,
-                category: {
-                    id: categoryData._id,
-                    name: categoryData.name
-                 }
-            });
-        const productAdd = await add.save();
+        const add = new category({ name, description, status, image});
+        const categoryAdd = await add.save();
 
-        if (productAdd) {
+        if (categoryAdd) {
             req.session.add = "Product added successfully";
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         } else {
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         }
     } catch (err) {
         if(err){
             req.session.create_failed = "Product not saved";
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         }
 
         console.log(err, "Product not saved");
@@ -51,8 +36,9 @@ exports.create = async (req, res) => {
 
 exports.find = async (req,res) => {
     try{
-        const items  = await products.find();
-        const categoryitem = await category.find();
+        const find  = await category.find();
+
+
         const  create_failed = req.session.create_failed;
         delete req.session.create_failed;
 
@@ -68,19 +54,18 @@ exports.find = async (req,res) => {
         const delete_message = req.session.delete;
         delete req.session.delete;
 
-        req.session.items = items;
-        if(items){
-            res.render('product', {
-                items : req.session.items,
+        req.session.find = find;
+        if(find){
+            res.render('category', {
+                find : req.session.find,
                 product_add : create_message,
                 product_update : update_message,
                 product_delete : delete_message,
                 create_failed : create_failed,
                 limit : limit,
-                category : categoryitem
             });
         }else{
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         }
     }catch(err) {
         console.log(err, "product not save");
@@ -91,19 +76,19 @@ exports.find = async (req,res) => {
 exports.view = async (req,res) => {
     const { id } = req.params;
     try{
-        const productdata = await products.findById(req.params.id);
-        res.render('view',{view : productdata, type : "product"});
+        const categorydata = await category.findById(req.params.id);
+        res.render('view',{view : categorydata, type : "category"});
     }catch(err){
         console.log(err);
-        res.render('product');
+        res.render('category');
     }
 };
 
 exports.editGet  = async (req,res) => {
     const {id} = req.params;
     try{
-        const edit = await products.findById(req.params.id);
-        res.render('edit',{edit : edit, type : 'product'});
+        const edit = await category.findById(req.params.id);
+        res.render('edit',{edit : edit, type : "category"});
     }catch(err){
         console.log(err);
     }
@@ -113,30 +98,29 @@ exports.editpost = async (req,res) => {
     const { id } = req.params;
     const { name, description, status} = req.body;
     try{
-        const updateProduct = await products.findByIdAndUpdate(id,{name, description, status}, {new : true});
+        const updatecategory = await category.findByIdAndUpdate(id,{name, description, status}, {new : true});
 
-        if(updateProduct){
+        if(updatecategory){
             req.session.update = "product update succesfully";
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         }
-        console.log(updateProduct);
-        res.redirect('/admin/product');
+        console.log(updatecategory);
+        res.redirect('/admin/category');
     }catch (err){
         console.log(err);
     }
 };
 
-exports.delete= async(req,res) => {
+exports.delete = async(req,res) => {
     const {id} = req.params;
     try{
-        const deleteproduct = await products.findByIdAndDelete(req.params.id);
+        const deleteproduct = await category.findByIdAndDelete(req.params.id);
         if(deleteproduct){
             req.session.delete = "product delete successfully";
-            res.redirect('/admin/product');
+            res.redirect('/admin/category');
         }else{
-            res.redirect('/admin/product');
+            res.redirect('/admin/login');
         }
-
     }catch(err){
         console.log(err);
     }
@@ -151,6 +135,7 @@ const storage =  multer.diskStorage({
         cb(null, uniqueName);
     }
 });
+
 const fileFilter =  (req, file, cb) => {
     const allowedTypes = /jpeg|jpg|png|gif|webp/;
     const extName = allowedTypes.test(path.extname(file.originalname).toLowerCase());
@@ -162,9 +147,9 @@ const fileFilter =  (req, file, cb) => {
         cb(new Error("Only image files are allowed!"));
     }
 };
+
 exports.multer =  multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: { fileSize: 2 * 1024 * 1024 }
 });
-

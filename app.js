@@ -3,6 +3,8 @@ const app = express();
 const path = require('path');
 const router = require('./routes/adminRoutes');
 const productRoutes = require('./routes/productRouter');
+const categoryRoutes = require('./routes/categoryRoutes');
+
 
 const dbconnect = require('./config/connect');
 const bodyParser = require('body-parser');
@@ -29,7 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({extended:true}));
 
 app.use('/', router);
-
 app.use('/', productRoutes);
+app.use('/', categoryRoutes);
 
 app.listen(3000);

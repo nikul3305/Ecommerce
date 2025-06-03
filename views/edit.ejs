@@ -17,10 +17,10 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h2>Edit product</h2>
+                           <h2>Edit <%= type === 'product' ? 'product' : 'category' %></h2>
                         </div>
                         <div class="card-body">
-                            <form action="/edit/<%= edit.id %>" method="post" class="needs-validation" novalidate>
+                            <form action="/admin/<%= type === 'product' ? 'product' : 'category' %>/edit/<%= edit.id %>" method="post" class="needs-validation" novalidate>
                                 <!-- Product Name -->
                                 <div class="form-floating mb-3 w-100 ">
                                     <div class="col-md-4 w-100">

@@ -27,13 +27,27 @@
                                    </div>
                                </div>
                                <!-- Product Name -->
-                               <div class="form-floating mb-3">
-                                   <div class="col-md-4 w-100">
+                               <div class="form-floating mb-3 ">
+                                   <div class="col-md-4 w-100 ">
                                        <label for="validationDefault02" class="form-label">product name</label>
                                        <input type="text"  class="form-control" name="name" id="validationDefault02" placeholder="product name" value="" required>
                                        <div class="invalid-feedback">
                                            Please enter a product name.
                                        </div>
+                                   </div>
+                               </div>
+                               <!-- category -->
+                               <div class="col-md-3 mb-3 w-100">
+                                   <label for="validationCustom04" class="form-label">category</label>
+                                   <select class="form-select w-50 " name="categoryid" id="validationCustom04" required>
+
+                                           <option selected disabled value="">Choose...</option>
+                                       <% category.forEach(cat => { %>
+                                           <option value="<%= cat._id %>"><%= cat.name %></option>
+                                       <% }) %>
+                                   </select>
+                                   <div class="invalid-feedback">
+                                       Please select a valid category.
                                    </div>
                                </div>
                                <!-- Product Description -->
@@ -44,6 +58,7 @@
                                        Please enter a message in the description.
                                    </div>
                                </div>
+
                                <!-- Product Status -->
                                <div class="mb-3">
                                    <label class="form-label d-block">Status:</label>
@@ -64,13 +79,12 @@
                                            </div>
                                    </div>
                                </div>
+
                                <!-- Submit Button -->
                                <button type="submit" class="btn btn-primary">Submit</button>
                            </form>
                        </div>
                    </div>
-            <!--    Sidebar end-->
-
             <!--    All product details    -->
             <div class="row mt-4">
                 <div class="col-md-12">
@@ -85,52 +99,70 @@
                                     <thead>
                                     <tr>
                                         <th>image</th>
-                                        <th>Brand</th>
+                                        <th>name</th>
                                         <th>description</th>
                                         <th>status</th>
+                                        <th>category</th>
                                         <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
+                                    <tbody >
                                     <% if(items.length == 0) {%>
-                                        <td colspan="4" class="text-center">No product found</td>
+                                        <tr>
+                                            <td colspan="4" class="text-center">No product found</td>
                                             <td colspan="4" class="text-center"></td>
+                                        </tr>
                                     <% } %>
                                     <% items.forEach( element => { %>
-                                         <td style="width: 400px;">
-                                            <% element.image.forEach(img => {  %>
-                                             <img src="/assets/images/<%= img %>" style="height: 30px;margin-left: 2px">
-                                            <% }) %>
-                                        </td>
-                                        <td><%= element.name|| "-" %></td>
-                                        <td><%= element.description || "-"%></td>
-                                        <td ><button class="border border-0 px-2 fs-6 rounded-pill" style="background-color: rgba(0,128,0,0.3)"><%= element.status || "-" %></button></td>
-                                        <td>
-                                            <div class="btn-group">
-                                                <button type="button" class="btn btn-light " data-bs-toggle="dropdown" aria-expanded="true">
-                                                    <i class="bi bi-three-dots-vertical"></i>
-                                                </button>
-                                                <ul class="dropdown-menu  text-center " >
-                                                    <li >
-                                                        <a class="dropdown-item " href="/view/<%= element.id %>">
-                                                            <i class="bi bi-eye me-2"></i><span>view</span>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="/edit/<%= element.id %>"><i class="bi bi-pencil-square me-2"></i><span>Edit</span></a>
-                                                    </li>
-                                                    <li>
-                                                        <a  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= element._id %>">
-                                                            <i class="bi bi-trash me-1 ms-3"></i> <span>Delete</span>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </td>
-
-                                    </tr>
-                                    <div class="modal fade" id="staticBackdrop<%= element._id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                        <tr  class="align-middle">
+                                            <!-- image -->
+                                            <td>
+                                                 <div id="myCarousel" class="carousel slide " data-bs-ride="carousel" style="height: 40px; width: 100px">
+                                                     <div class="carousel-inner">
+                                                         <% element.image.forEach((img, index) => { %>
+                                                             <div class="carousel-item <%= index === 0 ? 'active' : '' %>" style="height: 40px; width: 150px; object-fit: cover">
+                                                                 <img src="/assets/images/<%= img %>" class="d-block w-100" alt="Image">
+                                                             </div>
+                                                         <% }) %>
+                                                     </div>
+                                                     <!-- Arrows -->
+                                                     <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+                                                         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                                     </button>
+                                                     <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+                                                         <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                                     </button>
+                                                 </div>
+                                            </td>
+                                            <td ><%= element.name|| "-" %></td>
+                                            <td><%= element.description || "-"%></td>
+                                            <td ><button class="border border-0 px-2 fs-6 rounded-pill" style="background-color: rgba(0,128,0,0.3)"><%= element.status || "-" %></button></td>
+                                            <td><%= element.category.name%></td>
+                                            <!-- view/Edit/Delete -->
+                                            <td>
+                                                <div class="btn-group">
+                                                    <button type="button" class="btn btn-light " data-bs-toggle="dropdown" aria-expanded="true">
+                                                        <i class="bi bi-three-dots-vertical"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu  text-center " >
+                                                        <li >
+                                                            <a class="dropdown-item " href="/admin/product/view/<%= element.id %>">
+                                                                <i class="bi bi-eye me-2"></i><span>view</span>
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a class="dropdown-item" href="/admin/product/edit/<%= element.id %>"><i class="bi bi-pencil-square me-2"></i><span>Edit</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#staticBackdrop<%= element._id %>">
+                                                                <i class="bi bi-trash me-1 ms-3"></i> <span>Delete</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                         <div class="modal fade" id="staticBackdrop<%= element._id %>" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
                                             <div class="modal-content">
                                                 <div class="modal-header">
@@ -163,52 +195,7 @@
         </div>
     </div>
 </div>
-
-
 <% include layout/toast_message/product_add_message.ejs %>
 <% include layout/toast_message/product_delete_message.ejs %>
 <% include layout/toast_message/product_update_message.ejs %>
 
-
-
-<div class="container ">
-    <div class="row d-flex justify-content-center  ">
-        <div class="col-4 ">
-
-            <% if (typeof  create_failed  !== 'undefined' &&  create_failed ) { %>
-                <div class="toast show  top-0 z-3 m-0 position-fixed bg-success text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="me-auto">Login</strong>
-                        <small>Just now</small>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        <%=  create_failed %>
-                    </div>
-                </div>
-            <% } %>
-        </div>
-    </div>
-</div>
-
-<div class="container ">
-    <div class="row d-flex justify-content-center  ">
-        <div class="col-4 ">
-
-            <% if (typeof  limit  !== 'undefined' &&  limit ) { %>
-                <div class="toast show  top-0 z-3 m-0 position-fixed bg-success text-white bg-success" role="alert" aria-live="assertive" aria-atomic="true">
-                    <div class="toast-header">
-                        <strong class="me-auto">Login</strong>
-                        <small>Just now</small>
-
-                        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-                    </div>
-                    <div class="toast-body">
-                        <%=  limit %>
-                    </div>
-                </div>
-            <% } %>
-        </div>
-    </div>
-</div>

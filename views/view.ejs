@@ -12,21 +12,22 @@
                 <div class="col-12">
                     <div class="card">
                         <div class="card-header">
-                            <h2> View Product </h2>
+                            <h2><%= type === 'product' ? 'Product' : 'Category' %> Details</h2>
                         </div>
                         <div class="card-body">
+
                             <form action="" method="post" class="needs-validation" novalidate>
                                 <!-- Product Name -->
                                 <div class="form-floating mb-3 w-100">
                                     <div class="col-md-4 w-50">
                                         <label for="validationDefault01" class="form-label">product name</label>
-                                        <input type="text"  class="form-control" name="name" id="validationDefault01" aria-label="readonly input name"  value="<%= view.name %>" readonly>
+                                        <input type="text"  class="form-control" name="name" id="validationDefault01" aria-label="readonly input name"  value="<%=  view.name  %>" readonly>
                                     </div>
                                 </div>
                                 <!-- Product Description -->
                                 <div class="mb-3 w-150">
                                     <label for="validationTextarea" class="form-label">description</label>
-                                    <textarea class="form-control text-dark" id="validationTextarea" name="description" aria-label="readonly input description"   readonly>  <%= view.description %> </textarea>
+                                    <textarea class="form-control text-dark" id="validationTextarea" name="description" aria-label="readonly input description"   readonly> <%= view.description || '-' %> </textarea>
                                 </div>
                                 <!-- Product Status -->
                                 <div class="mb-3">
@@ -34,6 +35,7 @@
 
                                     <div id="statusGroup" class="border-0 p-0">
                                         <!-- Radio buttons container -->
+
                                         <div class="form-check d-flex">
                                             <div class="me-5">
                                                 <input class="form-check-input" type="radio" name="status" id="active" value="active"  <%= view.status == 'active' ? 'checked' : ' ' %> disabled>
@@ -47,11 +49,15 @@
                                                 <label class="form-check-label" for="inactive">Inactive</label>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                                 <!--  Button -->
-                                <a href="/admin/product" class="text-decoration-none"> <button class="btn btn-warning" type="button"> Back </button></a>
-
+                                <% if(type === 'product'){ %>
+                                    <a href="/admin/product" class="text-decoration-none"> <button class="btn btn-warning" type="button"> Back </button></a>
+                                <% }else{ %>
+                                    <a href="/admin/category" class="text-decoration-none"> <button class="btn btn-warning" type="button"> Back </button></a>
+                                <% } %>
                             </form>
                         </div>
                     </div>
