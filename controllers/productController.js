@@ -18,7 +18,7 @@ exports.create = async (req, res) => {
     try {
         const categoryData = await category.findById(categoryid);
         if (!categoryData) {
-            req.session.create_failed = "Invalid category selected";
+            req.flash('error','Invalid category selected')
             return res.redirect('/admin/product');
         }
         const add = new products(
@@ -34,7 +34,7 @@ exports.create = async (req, res) => {
         const productAdd = await add.save();
 
         if (productAdd) {
-            req.session.add = "Product added successfully";
+            req.flash('success','Product added successfully')
             res.redirect('/admin/product');
         } else {
             res.redirect('/admin/product');
@@ -53,30 +53,11 @@ exports.find = async (req,res) => {
     try{
         const items  = await products.find();
         const categoryitem = await category.find();
-        const  create_failed = req.session.create_failed;
-        delete req.session.create_failed;
-
-        const  limit = req.session.limit;
-        delete req.session.limit;
-
-        const create_message = req.session.add;
-        delete req.session.add;
-
-        const update_message = req.session.update;
-        delete req.session.update;
-
-        const delete_message = req.session.delete;
-        delete req.session.delete;
 
         req.session.items = items;
         if(items){
             res.render('product', {
                 items : req.session.items,
-                product_add : create_message,
-                product_update : update_message,
-                product_delete : delete_message,
-                create_failed : create_failed,
-                limit : limit,
                 category : categoryitem
             });
         }else{
@@ -84,7 +65,6 @@ exports.find = async (req,res) => {
         }
     }catch(err) {
         console.log(err, "product not save");
-
     }
 }
 
@@ -114,12 +94,7 @@ exports.editpost = async (req,res) => {
     const { name, description, status} = req.body;
     try{
         const updateProduct = await products.findByIdAndUpdate(id,{name, description, status}, {new : true});
-
-        if(updateProduct){
-            req.session.update = "product update succesfully";
-            res.redirect('/admin/product');
-        }
-        console.log(updateProduct);
+        req.flash('success','product update succesfully')
         res.redirect('/admin/product');
     }catch (err){
         console.log(err);
@@ -130,12 +105,9 @@ exports.delete= async(req,res) => {
     const {id} = req.params;
     try{
         const deleteproduct = await products.findByIdAndDelete(req.params.id);
-        if(deleteproduct){
-            req.session.delete = "product delete successfully";
-            res.redirect('/admin/product');
-        }else{
-            res.redirect('/admin/product');
-        }
+
+        req.flash('success','product delete successfully');
+        res.redirect('/admin/product');
 
     }catch(err){
         console.log(err);

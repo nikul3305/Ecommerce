@@ -17,19 +17,14 @@ exports.create = async (req, res) => {
     try {
         const add = new category({ name, description, status, image});
         const categoryAdd = await add.save();
+        req.flash('success', 'Product added successfully')
+        res.redirect('/admin/category');
 
-        if (categoryAdd) {
-            req.session.add = "Product added successfully";
-            res.redirect('/admin/category');
-        } else {
-            res.redirect('/admin/category');
-        }
     } catch (err) {
         if(err){
-            req.session.create_failed = "Product not saved";
+            req.flash('error', 'Product not saved')
             res.redirect('/admin/category');
         }
-
         console.log(err, "Product not saved");
     }
 };
@@ -38,32 +33,9 @@ exports.find = async (req,res) => {
     try{
         const find  = await category.find();
 
-
-        const  create_failed = req.session.create_failed;
-        delete req.session.create_failed;
-
-        const  limit = req.session.limit;
-        delete req.session.limit;
-
-        const create_message = req.session.add;
-        delete req.session.add;
-
-        const update_message = req.session.update;
-        delete req.session.update;
-
-        const delete_message = req.session.delete;
-        delete req.session.delete;
-
         req.session.find = find;
         if(find){
-            res.render('category', {
-                find : req.session.find,
-                product_add : create_message,
-                product_update : update_message,
-                product_delete : delete_message,
-                create_failed : create_failed,
-                limit : limit,
-            });
+            res.render('category', { find : req.session.find});
         }else{
             res.redirect('/admin/category');
         }
@@ -100,14 +72,13 @@ exports.editpost = async (req,res) => {
     try{
         const updatecategory = await category.findByIdAndUpdate(id,{name, description, status}, {new : true});
 
-        if(updatecategory){
-            req.session.update = "product update succesfully";
-            res.redirect('/admin/category');
-        }
-        console.log(updatecategory);
+        req.flash('success', 'product update succesfully')
         res.redirect('/admin/category');
+
     }catch (err){
+        req.flash('error', 'product not updated')
         console.log(err);
+        res.redirect('/admin/category');
     }
 };
 
@@ -115,13 +86,16 @@ exports.delete = async(req,res) => {
     const {id} = req.params;
     try{
         const deleteproduct = await category.findByIdAndDelete(req.params.id);
+
         if(deleteproduct){
-            req.session.delete = "product delete successfully";
+            req.flash('success','product delete successfully');
             res.redirect('/admin/category');
         }else{
-            res.redirect('/admin/login');
+            req.flash('error','product not delete,please try again');
+            res.redirect('/admin/category');
         }
     }catch(err){
+        req.flash('error','sometime went wrong');
         console.log(err);
     }
 }

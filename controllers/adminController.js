@@ -22,12 +22,10 @@ exports.getDashBord = (req,res) => {
 };
 // GET Admin DashBord Page
 exports.getAuthenticated =  async (req, res) => {
-    const successMessage = req.session.login_success;
-    delete req.session.login_success;
     if(req.session.admin) {
         const Totaluser = await admin.countDocuments();
         const Totalproduct = await products.countDocuments();
-        res.render('dashBord', {admin: req.session.admin, login_success: successMessage, Totaluser , Totalproduct  });
+        res.render('dashBord', {admin: req.session.admin,  Totaluser , Totalproduct  });
     }else {
         res.render('login');
     }
@@ -52,37 +50,24 @@ exports.postSignUp = async (req, res) => {
             name,
             mobileNo
         });
-
         await Create.save();
          const adminsave  = await Create.save();
         if(adminsave){
-            const successMessage = "Signup successful! Please login.";
-            req.session.signUp_success = successMessage;
+            req.flash('success', 'Successfully signup in.', "You're in!");
         }
         res.redirect('/admin/login');
-    } catch (error) {
-        console.log(error);
-        res.render('signup',{signup_err : "Your account already exists.pls login" });
+    } catch (err) {
+        req.flash('error',  'Your account already exists. Please login.')
+        return res.redirect('/admin/signup');
     }
 };
-
 
 // GET Login
 exports.getLogin = (req, res) =>  {
     if (req.session.admin) {
         return res.redirect('/admin/dashBord');
     }
-
-    const successMessage = req.session.signUp_success ;
-    delete req.session.signUp_success ;
-
-    // Check for logout message via query param
-    const errorMessage = req.query.logout === 'success' ? "Logout Successfully" : null;
-
-    res.render('login', {
-        signUp_success: successMessage,
-        logout_success: errorMessage
-    });
+    res.render('login');
 };
 // POST Login
 exports.postLogin = async (req, res) => {
@@ -91,38 +76,39 @@ exports.postLogin = async (req, res) => {
         const login = await admin.findOne({ email });
 
         if (!login) {
-            return res.render('login', { error: "Email not found." });
+            req.flash('error', "Email not found.");
+            return res.redirect('/admin/login');
         }
 
         const Match = await bcrypt.compare(password, login.password);
-
         if (!Match) {
-            return res.render('login', { error: "Password is incorrect." });
+            req.flash('error', 'Invalid email or password');
+            return res.redirect('/admin/login');
         }
-        req.session.admin = login
-        if(req.session.admin ){
-            const successMessage = "login success fully";
-            req.session.login_success = successMessage;
-        }
-        res.redirect('/admin/dashBord')
+        req.session.admin = login;
+        req.flash('success', "Login successfully");
+        return res.redirect('/admin/dashBord');
     } catch (err) {
-        console.error(err);
-        res.status(500).send('<h1>Server Error</h1>');
+        console.log(err);
+        req.flash('error', 'Something went wrong.');
+        return res.redirect('/admin/login');
     }
 };
 
+
 // GET Logout_page
 exports.getLogout = (req, res) => {
-
     req.session.destroy((err) => {
         if (err) {
             console.log('Error destroying session:', err);
+
             return res.redirect('/admin/dashBord');
         }
-        // Redirect with query parameter
-        res.redirect('/admin/login?logout=success');
+
+        res.redirect('/admin/login');
     });
 };
+
 exports.getProfile = async (req, res ) => {
     const admin = req.session.admin;
     if(admin) {

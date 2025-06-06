@@ -1,10 +1,8 @@
 
 <% layout('layout/auth') -%>
 
-<% include layout/toast_message/signup_failed_message.ejs %>
+
 <!--signup form -->
-
-
 <div class="container-fluid  h-100 bg-side" >
     <div class="row   d-flex justify-content-around align-items-center h-100" >
         <div class=" col-md-3  offset-7 ">
@@ -40,7 +38,8 @@
                     </form>
                 </div>
             </div>
-
         </div>
     </div>
 </div>
+
+<% include layout/message.ejs %>

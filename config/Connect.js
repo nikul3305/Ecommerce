@@ -1,16 +1,10 @@
 const mongoose =  require('mongoose');
 
 const dbconnect =  async  () => {
-    try {
-        await mongoose.connect('mongodb://127.0.0.1:27017/Ecommerce ', {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-        });
-        console.log("DataBase Connected");
-    } catch (error) {
-        console.log("DataBase Connection Error", error);
-    };
+
+    await mongoose.connect('mongodb://localhost:27017/mydb')
+        .then(() => console.log('Database Connected'))
+        .catch((err) => console.error(err));
 
 }
-
 module.exports = dbconnect;
